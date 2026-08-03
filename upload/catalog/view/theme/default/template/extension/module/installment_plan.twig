@@ -1,0 +1,104 @@
+{% if view_mode == 'modal' %}
+	<!-- Modo Modal -->
+	<div class="installment-list">
+		<button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#installment-modal">
+			<i class="fa fa-credit-card"></i>
+			{{ text_installment_card }}
+		</button>
+
+		<!-- Modal -->
+		<div class="modal fade" id="installment-modal" tabindex="-1" role="dialog" aria-labelledby="installment-modal-label">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title" id="installment-modal-label">
+							<i class="fa fa-credit-card"></i>
+							{{ text_installment_card }}
+						</h4>
+					</div>
+					<div class="modal-body">
+						<table class="table table-bordered table-striped">
+							{% for installment in installments %}
+								<tr>
+									<td>{{ installment.text }}</td>
+									{% if installment.total %}
+										<td class="installment-total text-right">{{ text_total }}<strong>{{ installment.total
+                                    }}</strong>
+										</td>
+									{% endif %}
+								</tr>
+							{% endfor %}
+						</table>
+						{% if interest_text %}
+							<p class="text-muted text-center">
+								<small>{{ interest_text }}</small>
+							</p>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% elseif view_mode == 'grid' %}
+	<!-- Modo Grid com Accordion -->
+	<div
+		class="installment-grid-accordion">
+		<!-- Header do Accordion (sempre visível) -->
+		<div class="accordion-header" data-toggle="collapse" data-target="#installment-grid-content" aria-expanded="false">
+			<div class="installment-summary-line">
+				<span class="installment-highlight">{{ text_installment_line }}</span>
+				<span class="accordion-toggle pull-right">
+					<span class="toggle-text">Ver opções</span>
+					<i class="fa fa-chevron-down"></i>
+				</span>
+			</div>
+		</div>
+
+		<!-- Conteúdo do Accordion (expansível) -->
+		<div id="installment-grid-content" class="collapse">
+			<div class="accordion-body">
+				<table class="table table-bordered table-striped">
+					{% for installment in installments %}
+						<tr>
+							<td>{{ installment.text }}</td>
+							{% if installment.total %}
+								<td class="installment-total text-right">{{ text_total }}<strong>{{ installment.total }}</strong>
+								</td>
+							{% endif %}
+						</tr>
+					{% endfor %}
+				</table>
+
+				{% if interest_text %}
+					<div class="interest-info-grid">
+						<p class="text-muted text-center">
+							<small>
+								<i class="fa fa-info-circle"></i>
+								{{ interest_text }}</small>
+						</p>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+{% elseif view_mode == 'simple' %}
+	<!-- Modo Simples -->
+	<ul class="list-unstyled">
+		{% for installment in installments %}
+			<li>{{ installment.text }}
+				{% if installment.total %}
+					<span class="installment-total pull-right">{{ text_total }}<strong>{{ installment.total }}</strong>
+					</span>
+				{% endif %}
+			</li>
+		{% endfor %}
+	</ul>
+{% elseif view_mode == 'line' %}
+	<!-- Modo Line -->
+	{% for installment in installments %}
+		<span>{{ installment.text }}</span>
+	{% endfor %}
+{% endif %}

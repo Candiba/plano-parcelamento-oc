@@ -1,0 +1,239 @@
+/* Modo Line */
+.price-installment {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.price {
+    margin-bottom: 0;
+}
+
+/* Lista base de parcelas */
+.installment-plan ul,
+.installment-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Parcelas em produtos relacionados */
+.product-thumb .installment-list {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Parcelas na página do produto */
+.installment-plan-product-page .table {
+    margin-bottom: 0;
+}
+
+/* Botão do modal */
+.installment-list .btn {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* Modal de parcelas */
+#installment-modal .modal-body {
+    padding: 20px;
+}
+
+#installment-modal .table {
+    margin-bottom: 15px;
+}
+
+#installment-modal .installment-total {
+    font-weight: bold;
+    color: #5cb85c;
+}
+
+/* Modo Grid/Accordion */
+.installment-grid-accordion {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
+.accordion-header {
+    background-color: #f5f5f5;
+    padding: 12px 15px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s;
+}
+
+.accordion-header:hover {
+    background-color: #e8e8e8;
+}
+
+.installment-summary-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.installment-highlight {
+    font-weight: bold;
+    color: #337ab7;
+    margin-left: 8px;
+}
+
+.accordion-toggle {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    color: #666;
+}
+
+.accordion-toggle .fa {
+    margin-left: 5px;
+    transition: transform 0.3s;
+}
+
+.accordion-header[aria-expanded="true"] .accordion-toggle .fa {
+    transform: rotate(180deg);
+}
+
+.accordion-body {
+    padding: 12px;
+}
+
+/* Container Grid das Parcelas */
+.installment-grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+/* Item Individual da Grade */
+.installment-grid-item {
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    background-color: #fff;
+    transition: all 0.2s ease;
+    overflow: hidden;
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+}
+
+.installment-grid-item:hover {
+    border-color: #337ab7;
+    box-shadow: 0 1px 4px rgba(51, 122, 183, 0.15);
+    transform: translateY(-1px);
+}
+
+/* Conteúdo do Item */
+.grid-item-content {
+    padding: 8px 6px;
+    text-align: center;
+    width: 100%;
+}
+
+.installment-number {
+    font-size: 14px;
+    font-weight: bold;
+    color: #337ab7;
+    margin-bottom: 2px;
+}
+
+.installment-value {
+    font-size: 13px;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 2px;
+    line-height: 1.1;
+}
+
+.installment-type {
+    font-size: 9px;
+    color: #7f8c8d;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+}
+
+.installment-total-grid {
+    font-size: 10px;
+    color: #27ae60;
+    font-weight: 500;
+    border-top: 1px solid #ecf0f1;
+    padding-top: 3px;
+    margin-top: 3px;
+    line-height: 1;
+}
+
+.interest-info-grid {
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+    margin-top: 10px;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    #installment-modal .modal-dialog {
+        margin: 10px;
+    }
+    
+    .installment-list .btn {
+        font-size: 12px;
+        padding: 5px 10px;
+    }
+    
+    /* Grid responsivo para mobile */
+    .installment-grid-container {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 6px;
+    }
+    
+    .grid-item-content {
+        padding: 6px 4px;
+    }
+    
+    .installment-number {
+        font-size: 13px;
+    }
+    
+    .installment-value {
+        font-size: 12px;
+    }
+    
+    .installment-grid-item {
+        min-height: 60px;
+    }
+    
+    .accordion-header {
+        padding: 10px 12px;
+    }
+    
+    .installment-highlight {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .installment-grid-container {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+    }
+    
+    .accordion-toggle .toggle-text {
+        display: none;
+    }
+    
+    .installment-grid-item {
+        min-height: 55px;
+    }
+    
+    .grid-item-content {
+        padding: 4px 2px;
+    }
+    
+    .installment-value {
+        font-size: 11px;
+    }
+    
+    .installment-number {
+        font-size: 12px;
+    }
+}

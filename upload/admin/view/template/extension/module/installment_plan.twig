@@ -1,0 +1,436 @@
+{{ header }}{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<button type="submit" form="form-module" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary">
+					<i class="fa fa-save"></i>
+				</button>
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default">
+					<i class="fa fa-reply"></i>
+				</a>
+			</div>
+			<h1>{{ heading_title }}</h1>
+			<span class="badge">{{ version }}</span>
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+					<li>
+						<a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+					</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+			<div class="alert alert-danger alert-dismissible">
+				<i class="fa fa-exclamation-circle"></i>
+				{{ error_warning }}
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+			</div>
+		{% endif %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					<i class="fa fa-pencil"></i>
+					{{ text_edit }}</h3>
+			</div>
+			<div class="panel-body">
+				<ul class="nav nav-tabs">
+					<li class="active">
+						<a href="#tab-settings" data-toggle="tab">{{ tab_settings }}</a>
+					</li>
+					<li>
+						<a href="#tab-installment" data-toggle="tab">{{ tab_installment }}</a>
+					</li>
+					<li>
+						<a href="#tab-message" data-toggle="tab">{{ tab_message }}</a>
+					</li>
+					<li>
+						<a href="#tab-about" data-toggle="tab">{{ tab_about }}</a>
+					</li>
+				</ul>
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-module" class="form-horizontal">
+					<div class="tab-content">
+						<div class="tab-pane active" id="tab-settings">
+							<div class="alert alert-info">
+								<i class="fa fa-info-circle"></i>
+								{{ tab_info_settings }}
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">
+									<span data-toggle="tooltip" title="{{ help_show_mode }}">{{ entry_show_mode }}</span>
+								</label>
+								<div class="col-sm-8">
+									<div class="radio">
+										<label class="radio-inline">
+											<input type="radio" name="module_installment_plan_show_mode" value="simple" {{ module_installment_plan_show_mode == 'simple' ? 'checked' : '' }}/>
+											{{ text_mode_line }}
+										</label>
+										<label class="radio-inline">
+											<input type="radio" name="module_installment_plan_show_mode" value="modal" {{ module_installment_plan_show_mode == 'modal' ? 'checked' : '' }}/>
+											{{ text_mode_list }}
+										</label>
+										<label class="radio-inline">
+											<input type="radio" name="module_installment_plan_show_mode" value="grid" {{ module_installment_plan_show_mode == 'grid' ? 'checked' : '' }}/>
+											{{ text_mode_grid }}
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">
+									<span data-toggle="tooltip" title="{{ help_update_value }}">{{ entry_update_value }}</span>
+								</label>
+								<div class="col-sm-8">
+									<div class="radio">
+										<label class="radio-inline">
+											{% if module_installment_plan_update_value == '1' %}
+												<input type="radio" name="module_installment_plan_update_value" value="1" checked/>
+												{{ text_yes }}
+											{% else %}
+												<input type="radio" name="module_installment_plan_update_value" value="1"/>
+												{{ text_yes }}
+											{% endif %}
+										</label>
+										<label class="radio-inline">
+											{% if module_installment_plan_update_value == '0' %}
+												<input type="radio" name="module_installment_plan_update_value" value="0" checked/>
+												{{ text_no }}
+											{% else %}
+												<input type="radio" name="module_installment_plan_update_value" value="0"/>
+												{{ text_no }}
+											{% endif %}
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">
+									<span data-toggle="tooltip" title="{{ help_show_total_amount }}">{{ entry_show_total_amount }}</span>
+								</label>
+								<div class="col-sm-8">
+									<div class="radio">
+										<label class="radio-inline">
+											{% if module_installment_plan_show_total_amount == '1' %}
+												<input type="radio" name="module_installment_plan_show_total_amount" value="1" checked/>
+												{{ text_yes }}
+											{% else %}
+												<input type="radio" name="module_installment_plan_show_total_amount" value="1"/>
+												{{ text_yes }}
+											{% endif %}
+										</label>
+										<label class="radio-inline">
+											{% if module_installment_plan_show_total_amount == '0' %}
+												<input type="radio" name="module_installment_plan_show_total_amount" value="0" checked/>
+												{{ text_no }}
+											{% else %}
+												<input type="radio" name="module_installment_plan_show_total_amount" value="0"/>
+												{{ text_no }}
+											{% endif %}
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">
+									<span data-toggle="tooltip" title="{{ help_product_out_of_stock }}">{{ entry_product_out_of_stock }}</span>
+								</label>
+								<div class="col-sm-8">
+									<div class="radio">
+										<label class="radio-inline">
+											{% if module_installment_plan_product_out_of_stock == '1' %}
+												<input type="radio" name="module_installment_plan_product_out_of_stock" value="1" checked/>
+												{{ text_yes }}
+											{% else %}
+												<input type="radio" name="module_installment_plan_product_out_of_stock" value="1"/>
+												{{ text_yes }}
+											{% endif %}
+										</label>
+										<label class="radio-inline">
+											{% if module_installment_plan_product_out_of_stock == '0' %}
+												<input type="radio" name="module_installment_plan_product_out_of_stock" value="0" checked/>
+												{{ text_no }}
+											{% else %}
+												<input type="radio" name="module_installment_plan_product_out_of_stock" value="0"/>
+												{{ text_no }}
+											{% endif %}
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+								<div class="col-sm-8">
+									<select name="module_installment_plan_status" id="input-status" class="form-control">
+										<option value="1" {{ module_installment_plan_status ? ' selected="selected"' : '' }}>{{ text_enabled }}</option>
+										<option value="0" {{ module_installment_plan_status ? '' : ' selected="selected"' }}>{{ text_disabled }}</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab-installment">
+							<div class="alert alert-info">
+								<i class="fa fa-info-circle"></i>
+								{{ tab_info_installment }}
+							</div>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label" for="input-minimum-installment-amount">
+									<span data-toggle="tooltip" title="{{ help_installment_amount }}">{{ entry_installment_amount }}</span>
+								</label>
+								<div class="col-sm-8">
+									<input type="text" name="module_installment_plan_installment_amount" id="input-minimum-installment-amount" value="{{ module_installment_plan_installment_amount }}" class="form-control"/>
+									{% if error_installment_amount %}
+										<div class="text-danger">{{ error_installment_amount }}</div>
+									{% endif %}
+								</div>
+							</div>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label" for="input-interest-rate">
+									<span data-toggle="tooltip" title="{{ help_interest_rate }}">{{ entry_interest_rate }}</span>
+								</label>
+								<div class="col-sm-8">
+									<input type="text" name="module_installment_plan_interest_rate" id="input-interest-rate" value="{{ module_installment_plan_interest_rate }}" class="form-control"/>
+									{% if error_interest_rate %}
+										<div class="text-danger">{{ error_interest_rate }}</div>
+									{% endif %}
+								</div>
+							</div>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label" for="input-total-installments">
+									<span data-toggle="tooltip" title="{{ help_total_installments }}">{{ entry_total_installments }}</span>
+								</label>
+								<div class="col-sm-8">
+									<input type="number" name="module_installment_plan_total_installments" id="input-total-installments" value="{{ module_installment_plan_total_installments }}" class="form-control"/>
+									{% if error_total_installments %}
+										<div class="text-danger">{{ error_total_installments }}</div>
+									{% endif %}
+								</div>
+							</div>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label" for="input-total-interest-free-installments">
+									<span data-toggle="tooltip" title="{{ help_total_interest_free_installments }}">{{ entry_total_interest_free_installments }}</span>
+								</label>
+								<div class="col-sm-8">
+									<input type="number" name="module_installment_plan_total_interest_free_installments" id="input-total-interest-free-installments" value="{{ module_installment_plan_total_interest_free_installments }}" class="form-control"/>
+									{% if error_total_interest_free_installments %}
+										<div class="text-danger">{{ error_total_interest_free_installments }}</div>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab-message">
+							<div class="alert alert-info">
+								<i class="fa fa-info-circle"></i>
+								{{ tab_info_message }}
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">{{ entry_show_store_pages }}</label>
+								<div class="col-sm-8">
+									<div class="radio">
+										<label class="radio-inline">
+											{% if module_installment_plan_show_store_pages == '1' %}
+												<input type="radio" name="module_installment_plan_show_store_pages" value="1" checked/>
+												{{ text_yes }}
+											{% else %}
+												<input type="radio" name="module_installment_plan_show_store_pages" value="1"/>
+												{{ text_yes }}
+											{% endif %}
+										</label>
+										<label class="radio-inline">
+											{% if module_installment_plan_show_store_pages == '0' %}
+												<input type="radio" name="module_installment_plan_show_store_pages" value="0" checked/>
+												{{ text_no }}
+											{% else %}
+												<input type="radio" name="module_installment_plan_show_store_pages" value="0"/>
+												{{ text_no }}
+											{% endif %}
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">{{ entry_show_product_page }}</label>
+								<div class="col-sm-8">
+									<div class="radio">
+										<label class="radio-inline">
+											{% if module_installment_plan_show_product_page == '1' %}
+												<input type="radio" name="module_installment_plan_show_product_page" value="1" checked/>
+												{{ text_yes }}
+											{% else %}
+												<input type="radio" name="module_installment_plan_show_product_page" value="1"/>
+												{{ text_yes }}
+											{% endif %}
+										</label>
+										<label class="radio-inline">
+											{% if module_installment_plan_show_product_page == '0' %}
+												<input type="radio" name="module_installment_plan_show_product_page" value="0" checked/>
+												{{ text_no }}
+											{% else %}
+												<input type="radio" name="module_installment_plan_show_product_page" value="0"/>
+												{{ text_no }}
+											{% endif %}
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-notice-store-pages">
+									<span data-toggle="tooltip" title="{{ help_notice_store_pages }}">{{ entry_notice_store_pages }}</span>
+								</label>
+								<div class="col-sm-8">
+									<textarea name="module_installment_plan_notice_store_pages" id="input-notice-store-pages" rows="2" cols="100" class="form-control" aria-describedby="helpStorePages">{{ module_installment_plan_notice_store_pages }}</textarea>
+									<span id="helpStorePages" class="help-block">{{ entry_help_default }}</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-notice-product-page">
+									<span data-toggle="tooltip" title="{{ help_notice_product_page }}">{{ entry_notice_product_page }}</span>
+								</label>
+								<div class="col-sm-8">
+									<textarea name="module_installment_plan_notice_product_page" id="input-notice-product-page" rows="2" cols="100" class="form-control" aria-describedby="helpProductPage">{{ module_installment_plan_notice_product_page }}</textarea>
+									<span id="helpProductPage" class="help-block">{{ entry_help_default }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab-about">
+							<div class="row">
+								<div class="col-md-8">
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<h3 class="panel-title">
+												<i class="fa fa-info-circle"></i>
+												{{ about_module_title }}</h3>
+										</div>
+										<div class="panel-body">
+											<h4>
+												<i class="fa fa-credit-card"></i>
+												{{ about_description_title }}
+											</h4>
+											<p>{{ about_description_text }}</p>
+											<hr>
+											<h4>
+												<i class="fa fa-list"></i>
+												{{ about_features_title }}</h4>
+											<ul>
+												<li>{{ about_feature_1 }}</li>
+												<li>{{ about_feature_2 }}</li>
+												<li>{{ about_feature_3 }}</li>
+												<li>{{ about_feature_4 }}</li>
+												<li>{{ about_feature_5 }}</li>
+												<li>{{ about_feature_6 }}</li>
+											</ul>
+											<hr>
+											<h4>
+												<i class="fa fa-cogs"></i>
+												{{ about_modes_title }}
+											</h4>
+											<div class="row">
+												<div class="col-md-4">
+													<div class="well well-sm">
+														<strong>
+															<i class="fa fa-list-ul"></i>
+															{{ about_mode_simple }}</strong>
+														<p>{{ about_mode_simple_desc }}</p>
+													</div>
+												</div>
+												<div class="col-md-4">
+													<div class="well well-sm">
+														<strong>
+															<i class="fa fa-window-maximize"></i>
+															{{ about_mode_modal }}</strong>
+														<p>{{ about_mode_modal_desc }}</p>
+													</div>
+												</div>
+												<div class="col-md-4">
+													<div class="well well-sm">
+														<strong>
+															<i class="fa fa-table"></i>
+															{{ about_mode_grid }}</strong>
+														<p>{{ about_mode_grid_desc }}</p>
+													</div>
+												</div>
+											</div>
+											<hr>
+											<h4>
+												<i class="fa fa-calculator"></i>
+												{{ about_calculation_title }}
+											</h4>
+											<p>{{ about_calculation_desc }}</p>
+											<hr>
+											<div class="alert alert-warning">
+												<i class="fa fa-exclamation-triangle"></i>
+												<strong>{{ about_important_title }}</strong>
+												<br>
+												{{ about_important_desc }}
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="panel panel-info">
+										<div class="panel-heading">
+											<h3 class="panel-title">
+												<i class="fa fa-code"></i>
+												{{ about_developer_title }}
+											</h3>
+										</div>
+										<div class="panel-body">
+											<div class="text-center">
+												<img src="https://anderweb.com.br/assets/images/anderweb_logo_ret.webp" alt="AnderWeb HS" style="max-width: 64px; margin-bottom: 15px;">
+												<h4>AnderWeb HS</h4>
+												<p>{{ about_developer_desc }}</p>
+												<a href="https://anderweb.com.br" target="_blank" class="btn btn-info btn-sm">
+													<i class="fa fa-external-link"></i>
+													{{ about_visit_website }}
+												</a>
+											</div>
+										</div>
+									</div>
+
+									<div class="panel panel-success">
+										<div class="panel-heading">
+											<h3 class="panel-title">
+												<i class="fa fa-heart"></i>
+												{{ about_support_title }}
+											</h3>
+										</div>
+										<div class="panel-body">
+											<p>{{ about_support_desc }}</p>
+											<div class="text-center">
+												<a href="https://anderweb.com.br/contato" target="_blank" class="btn btn-success btn-sm">
+													<i class="fa fa-envelope"></i>
+													{{ about_contact_support }}
+												</a>
+											</div>
+										</div>
+									</div>
+
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<h3 class="panel-title">
+												<i class="fa fa-tag"></i>
+												{{ about_version_title }}
+											</h3>
+										</div>
+										<div class="panel-body">
+											<dl class="dl-horizontal">
+												<dt>{{ about_version_label }}:</dt>
+												<dd>{{ version }}</dd>
+												<dt>{{ about_opencart_label }}:</dt>
+												<dd>3.x</dd>
+												<dt>{{ about_php_label }}:</dt>
+												<dd>7.0+</dd>
+											</dl>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{{ footer }}

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+    <name>Plano de Parcelamento</name>
+    <code>installment_plan</code>
+    <version>1.0</version>
+    <author>AnderWeb HS</author>
+    <link>http://anderweb.com.br</link>
+
+    <file path="catalog/controller/common/header.php">
+        <operation error="log">
+            <search><![CDATA[public function index() {]]></search>
+            <add position="after"><![CDATA[$this->document->addStyle('catalog/view/theme/default/stylesheet/installment_plan.css');]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/product/product.php">
+        <operation error="log">
+            <search><![CDATA[$discounts = $this->model_catalog_product->getProductDiscounts($this->request->get['product_id']);]]></search>
+            <add position="before"><![CDATA[
+            if ($this->config->get('module_installment_plan_status')) {
+                if ($this->config->get('module_installment_plan_show_product_page')) {
+                    $product_info['product_page'] = true;
+
+                    $data['installment'] = $this->load->controller('extension/module/installment_plan/checkInstallment', $product_info);
+                }
+            } else {
+                $data['installment'] = false;
+            }]]></add>
+        </operation>
+        <operation error="log" info="Produtos relacionados">
+            <search><![CDATA[$data['products'][] = array(]]></search>
+            <add position="before"><![CDATA[
+            if ($this->config->get('module_installment_plan_status')) {
+                if ($this->config->get('module_installment_plan_show_store_pages')) {
+                    $installment_plan = $this->load->controller('extension/module/installment_plan/checkInstallment', $result);
+                }
+            } else {
+                $installment_plan = false;
+            }]]></add>
+        </operation>
+        <operation error="log" info="Produtos relacionados">
+            <search><![CDATA['price'       => $price,]]></search>
+            <add position="after"><![CDATA[
+            'installment'       => $installment_plan,
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/product/{search,category,manufacturer,special}.php">
+        <operation error="log" info="Resultados de busca, Categorias, Fabricante e Promoções">
+            <search><![CDATA[$data['products'][] = array(]]></search>
+            <add position="before"><![CDATA[
+            if ($this->config->get('module_installment_plan_status')) {
+                if ($this->config->get('module_installment_plan_show_store_pages')) {
+                    $installment_plan = $this->load->controller('extension/module/installment_plan/checkInstallment', $result);
+                }
+            } else {
+                $installment_plan = false;
+            }]]></add>
+        </operation>
+        <operation error="log">
+            <search><![CDATA['price'       => $price,]]></search>
+            <add position="after"><![CDATA['installment'       => $installment_plan,]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/extension/module/{latest,bestseller,special}.php">
+        <operation error="log" info="Novidades, Mais Vendidos e Promoções">
+            <search><![CDATA[$data['products'][] = array(]]></search>
+            <add position="before"><![CDATA[
+            if ($this->config->get('module_installment_plan_status')) {
+                if ($this->config->get('module_installment_plan_show_store_pages')) {
+                    $installment_plan = $this->load->controller('extension/module/installment_plan/checkInstallment', $result);
+                }
+            } else {
+                $installment_plan = false;
+            }]]></add>
+        </operation>
+        <operation error="log">
+            <search><![CDATA['price'       => $price,]]></search>
+            <add position="after"><![CDATA['installment'       => $installment_plan,]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/view/theme/default/template/product/{product,search,category,manufacturer_info,special}.twig">
+        <operation error="log">
+            <search><![CDATA[{% if product.tax %}]]></search>
+            <add position="after"><![CDATA[                {% if product.installment %}<div class="installment-item">{{ product.installment }}</div>{% endif %}]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/controller/extension/module/featured.php">
+        <operation error="log" info="Produtos em destaque">
+            <search><![CDATA[$data['products'][] = array(]]></search>
+            <add position="before"><![CDATA[
+            if ($this->config->get('module_installment_plan_status')) {
+                if ($this->config->get('module_installment_plan_show_store_pages')) {
+                    $installment_plan = $this->load->controller('extension/module/installment_plan/checkInstallment', $product_info);
+                }
+            } else {
+                $installment_plan = false;
+            }]]></add>
+        </operation>
+        <operation error="log">
+            <search><![CDATA['price'       => $price,]]></search>
+            <add position="after"><![CDATA[
+            'installment'       => $installment_plan,
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/view/theme/default/template/extension/module/{latest,bestseller,special,featured}.twig">
+        <operation error="log">
+            <search><![CDATA[{% if product.rating]]></search>
+            <add position="before"><![CDATA[
+            {% if product.installment %}
+                {{ product.installment }}
+            {% endif %}
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="catalog/view/theme/default/template/product/product.twig">
+        <operation error="log">
+            <search><![CDATA[{% if tax %}]]></search>
+            <add position="before"><![CDATA[            {% if installment %}<div class="installment-plan-product-page">{{ installment }}</div>{% endif %}]]></add>
+        </operation>
+        <operation error="log">
+            <search><![CDATA[{{ footer }}]]></search>
+            <add position="before"><![CDATA[
+        <script type="text/javascript"><!--
+            var getInstallments = function() {
+                var formData = $('#product input[type=\'text\'], #product input[type=\'hidden\'], #product input[type=\'radio\']:checked, #product input[type=\'checkbox\']:checked, #product select, #product textarea');
+                
+                $.ajax({
+                    url: 'index.php?route=extension/module/installment_plan/updateInstallments',
+                    type: 'post',
+                    data: formData,
+                    dataType: 'json',
+                    success: function(json) {
+                        if (json['status'] == 'success' && $('.installment-plan-product-page').length > 0 && json['installments']) {
+                            $('.installment-plan-product-page').fadeOut(150).html(json['installments']).fadeIn(50);
+                            
+                            // Re-inicializar componentes Bootstrap após AJAX
+                            $('.installment-plan-product-page .collapse').collapse();
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
+
+            $('#product input[type="text"], #product input[type="hidden"], #product input[type="radio"], #product input[type="checkbox"], #product select, #product textarea').on('change', getInstallments);
+            
+            getInstallments();
+        //--></script>]]></add>
+        </operation>
+    </file> 
+
+    
+<!-- Modificação para o tema journal 3 -->
+    <file path="catalog/controller/journal3/{products,side_products}.php">
+        <operation error="log">
+            <search><![CDATA[$products[$result['product_id']] = array(]]></search>
+            <add position="before"><![CDATA[
+            if ($this->config->get('module_installment_plan_status')) {
+                if ($this->config->get('module_installment_plan_show_store_pages')) {
+                    $installment_plan = $this->load->controller('extension/module/installment_plan/checkInstallment', $result);
+                }
+            } else {
+                $installment_plan = false;
+            }]]></add>
+        </operation>
+        <operation error="log">
+            <search><![CDATA['price'          => $price,]]></search>
+            <add position="after"><![CDATA[
+            'installment'          => $installment_plan,
+           ]]></add>
+        </operation>
+    </file>
+
+	<file path="catalog/view/theme/journal3/template/journal3/{product_card,side_products}.twig">
+        <operation error="log">
+            <search><![CDATA[{% if product.rating %}]]></search>
+            <add position="before"><![CDATA[
+            {% if product.installment %}
+                <div class="installment-item">
+                    {{ product.installment }}
+                </div>
+            {% endif %}
+            ]]></add>
+        </operation>
+    </file>
+
+	<file path="catalog/view/theme/journal3/template/product/product.twig">
+        <operation error="log">
+            <search><![CDATA[{% if discounts %}]]></search>
+            <add position="before"><![CDATA[
+            {% if installment %}
+                <div class="installment-plan-product-page">
+                    {{ installment }}
+                </div>
+            {% endif %}
+            ]]></add>
+        </operation>
+        <operation error="log">
+            <search><![CDATA[{{ footer }}]]></search>
+            <add position="before"><![CDATA[
+        <script type="text/javascript"><!--
+            var getInstallments = function() {
+                var formData = $('#product-id, #product-quantity, .product-options input[type="radio"]:checked, .product-options input[type="checkbox"]:checked, .product-options select');
+                
+                $.ajax({
+                    url: 'index.php?route=extension/module/installment_plan/updateInstallments',
+                    type: 'post',
+                    data: formData,
+                    dataType: 'json',
+                    success: function(json) {
+                        if (json['status'] == 'success' && $('.installment-plan-product-page').length > 0 && json['installments']) {
+                            $('.installment-plan-product-page').fadeOut(150).html(json['installments']).fadeIn(50);
+                            
+                            // Re-inicializar delegação de eventos Journal3 após AJAX
+                            $(document).trigger('journal3:reinit');
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
+
+            $('.product-options input[type="radio"], .product-options input[type="checkbox"], .product-options select, #product-quantity').on('change', getInstallments);
+            
+            getInstallments();
+        //--></script>]]></add>
+        </operation>
+    </file>
+<!-- Modificação para o tema journal 3 -->
+</modification>
