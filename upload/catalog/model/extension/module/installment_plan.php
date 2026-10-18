@@ -1,5 +1,5 @@
 <?php
-class ModelExtensionModuleInstallmentPayment extends Model
+class ModelExtensionModuleInstallmentPlan extends Model
 {
 
     public function getProductDiscount($product_id, $quantity)

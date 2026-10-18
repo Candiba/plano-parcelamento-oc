@@ -72,9 +72,14 @@ class ControllerExtensionModuleInstallmentPlan extends Controller
 
         $best_installment = null;
 
+        // Maior parcela SEM juros válida (usada nos modos simple/line)
+        $best_interest_free_installment = null;
+
         for ($i = 1; $i <= $config['total_installments']; $i++) {
             // Calcular valor da parcela
-            if ($i <= $config['total_interest_free'] || $config['interest_rate'] == 0) {
+            $is_interest_free = ($i <= $config['total_interest_free'] || $config['interest_rate'] == 0);
+
+            if ($is_interest_free) {
                 $installment_value = $price / $i;
                 $installment_text_sufix = $this->language->get('text_interest_free');
             } else {
@@ -103,8 +108,13 @@ class ControllerExtensionModuleInstallmentPlan extends Controller
 
                 $valid_installments[] = $installment_data;
 
-                // Guarda a maior parcela válida (para modo simples)
+                // Guarda a maior parcela válida (com ou sem juros)
                 $best_installment = $installment_data;
+
+                // Guarda a maior parcela válida SEM juros (referência simple/line)
+                if ($is_interest_free) {
+                    $best_interest_free_installment = $installment_data;
+                }
             }
         }
 
@@ -113,21 +123,23 @@ class ControllerExtensionModuleInstallmentPlan extends Controller
             return '';
         }
 
+        // Maior parcela SEM juros válida alimenta todos os resumos
+        // (modos simple/line e a linha-resumo do grid); fallback para a maior
+        // parcela válida caso nenhuma sem juros exista.
+        $summary_installment = $best_interest_free_installment ? $best_interest_free_installment : $best_installment;
+
         // Definir quais parcelas mostrar baseado no modo
         if ($show_mode == 'modal' || $show_mode == 'grid') {
-            // Modo Modal: mostra todas as parcelas válidas
+            // Modos Modal/Grid: mostra todas as parcelas válidas
             $data['installments'] = $valid_installments;
-            // Para o modal, usar a última (maior) parcela para o texto de linha
-            $installment_end = $best_installment['installment'];
-            $installment_end_sufix = $best_installment['interest_type'];
-            $installment_end_value = $best_installment['value'];
         } else {
-            // Modo Simples: mostra apenas a maior parcela válida
-            $data['installments'] = array($best_installment);
-            $installment_end = $best_installment['installment'];
-            $installment_end_sufix = $best_installment['interest_type'];
-            $installment_end_value = $best_installment['value'];
+            // Modos Simples/Line: mostra apenas a maior parcela SEM juros válida
+            $data['installments'] = array($summary_installment);
         }
+
+        $installment_end = $summary_installment['installment'];
+        $installment_end_sufix = $summary_installment['interest_type'];
+        $installment_end_value = $summary_installment['value'];
 
         $data['interest_text'] = '';
 
@@ -149,7 +161,7 @@ class ControllerExtensionModuleInstallmentPlan extends Controller
 
         $this->load->model('catalog/product');
 
-        $json = array();
+        $json = array('status' => 'error', 'installments' => '');
 
         $product_id = (int)$this->request->post['product_id'];
 
@@ -190,8 +202,6 @@ class ControllerExtensionModuleInstallmentPlan extends Controller
                 }
             }
 
-            $json['installments'] = '';
-
             $this->load->model('extension/module/installment_plan');
             $base_price = $this->model_extension_module_installment_plan->getProductDiscount($product_id, $quantity);
 
@@ -204,6 +214,7 @@ class ControllerExtensionModuleInstallmentPlan extends Controller
             if ((float)$price > 0) {
                 if ($this->config->get(self::EXT_MODULE . '_update_value')) {
                     $json['installments'] = $this->getInstallment($price, true);
+                    $json['status'] = 'success';
                 }
             }
         }
