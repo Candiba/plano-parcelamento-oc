@@ -11,7 +11,7 @@ $_['tab_info_message']                      = 'Configurações da mensagem do pl
 $_['text_extension']                        = 'Extensões';
 $_['text_success']                          = 'Sucesso: O módulo Plano de Parcelamento foi modificado com sucesso!';
 $_['text_notice_store_pages_default']       = '[PARCELA]x de [PRECO] [TIPO_JUROS]';
-$_['text_notice_product_page_default']      = '<i class="fa fa-credit-card"></i> <strong>[PARCELA]x de [PRECO]</strong> [TIPO_JUROS]';
+$_['text_notice_product_page_default']      = '<strong>[PARCELA]x de [PRECO]</strong> [TIPO_JUROS]';
 $_['text_edit']                             = 'Configurando o módulo Plano de Parcelamento';
 $_['text_mode_line']                        = 'Simples';
 $_['text_mode_list']                        = 'Modal';
